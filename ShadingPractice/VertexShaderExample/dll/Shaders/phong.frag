@@ -6,6 +6,8 @@ in vec3 newLightPos;
 
 out vec4 frag_color;
 
+uniform int mode;
+uniform float threshold;
 uniform float Ka;
 uniform float Kd;
 uniform float Ks;
@@ -26,5 +28,10 @@ void main() {
     	float specAngle = max(dot(N, H), 0.0);
     	spec = pow(specAngle, shinessVal);
     //}
-    frag_color = vec4(Ka * vec3(0, 0.2, 0.2) + Kd * lamber * vec3(0, 0.5, 0.5) + Ks * spec * vec3(0, 0.8, 0.8), 1.0);
+    if(dot(N, V) < threshold && mode == 1) {
+        frag_color = vec4(1 ,1 , 1 , 1);
+    }
+    else {
+        frag_color = vec4(Ka * vec3(0.0, 0.2, 0.2) + Kd * lamber * vec3(0.0, 0.5, 0.5) + Ks * spec * vec3(0.0, 0.8, 0.8), 1.0);
+    }
 }

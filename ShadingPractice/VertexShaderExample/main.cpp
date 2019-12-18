@@ -33,8 +33,8 @@ int verticeNumber = 3;
 int vNum = 3;
 int mode = 1;
 
-float Ks = 0, Kd = 0;
-bool border = false;
+float Ks = 0, Kd = 0, threshold = 0.2f;
+int border = 0;
 
 //Storing vertex datas that will be sent to shader
 class VertexAttribute {
@@ -193,15 +193,6 @@ void display() {
 	glDepthFunc(GL_LEQUAL);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if (border) {
-		GLUquadric *quad;
-		quad = gluNewQuadric();
-		glPushMatrix();
-		glTranslatef(0, 0, -1);
-		gluSphere(quad, 1.2, 100, 20);
-		glPopMatrix();
-	}
-
 	GLfloat pmtx[16];
 	GLfloat mmtx[16];
 	glGetFloatv(GL_PROJECTION_MATRIX, pmtx);
@@ -215,6 +206,16 @@ void display() {
 
 	glUseProgram(program);
 
+	GLint modeloc = glGetUniformLocation(program, "mode");
+	if (modeloc != -1)
+	{
+		glUniform1i(modeloc, border);
+	}
+	GLint thloc = glGetUniformLocation(program, "threshold");
+	if (thloc != -1)
+	{
+		glUniform1f(thloc, threshold);
+	}
 	GLint Kaloc = glGetUniformLocation(program, "Ka");
 	if (Kaloc != -1)
 	{
